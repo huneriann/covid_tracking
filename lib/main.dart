@@ -1,4 +1,5 @@
 import 'package:covid_tracking/widgets/countryDayOneRouteWidget.dart';
+import 'package:covid_tracking/widgets/detailsCountryDayOneRouteWidget.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,26 +19,10 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         accentColor: Colors.white,
       ),
-      home: const MyHomePage(title: 'COVID Tracking'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: CountryDayOneRouteWidget(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => CountryDayOneRouteWidget(),
+      },
     );
   }
 }

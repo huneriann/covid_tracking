@@ -13,7 +13,9 @@ class Covid19ApiService {
       Iterable l = json.decode(response.body);
       List<CountryDayOneRoute> data = List<CountryDayOneRoute>.from(
           l.map((model) => CountryDayOneRoute.fromJson(model)));
-      return data;
+
+      var reversed = List.of(data.reversed);
+      return reversed;
     } else {
       throw Exception('Failed to load countryDayOneRoute');
     }
