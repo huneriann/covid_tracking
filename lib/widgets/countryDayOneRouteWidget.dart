@@ -19,7 +19,6 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
   late Future<List<CountryDayOneRoute>> list;
 
   Future<List<CountryDayOneRoute>> getData() async {
-    print('halo!');
     return await service.getCountryDayOneRoute('Azerbaijan');
   }
 
@@ -68,11 +67,15 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
                                         DetailsCountryDayOneRouteWidget(
                                       todaysData: (snapshot.data
                                           as List<CountryDayOneRoute>)[index],
-                                      yesterdayssData: index == 0
+                                      yesterdayssData: index !=
+                                              (snapshot.data as List<
+                                                          CountryDayOneRoute>)
+                                                      .length -
+                                                  1
                                           ? (snapshot.data as List<
-                                              CountryDayOneRoute>)[index]
+                                              CountryDayOneRoute>)[index + 1]
                                           : (snapshot.data as List<
-                                              CountryDayOneRoute>)[index - 1],
+                                              CountryDayOneRoute>)[index],
                                     ),
                                   ));
                             },
