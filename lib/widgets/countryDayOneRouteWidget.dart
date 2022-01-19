@@ -18,8 +18,11 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
 
   late Future<List<CountryDayOneRoute>> list;
 
+  String? countryName;
+
   Future<List<CountryDayOneRoute>> getData() async {
-    return await service.getCountryDayOneRoute('Azerbaijan');
+    countryName ??= 'Azerbaijan';
+    return await service.getCountryDayOneRoute(countryName!);
   }
 
   @override
@@ -33,71 +36,104 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('COVID Tracking'),
+        title: const Text('COVID Tracking'),
       ),
-      body: FutureBuilder(
-        future: getData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.none) {
-            return const Center(
-              child: Text('Connection failed'),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                    itemCount:
-                        (snapshot.data as List<CountryDayOneRoute>).length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
-                        child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        DetailsCountryDayOneRouteWidget(
-                                      todaysData: (snapshot.data
-                                          as List<CountryDayOneRoute>)[index],
-                                      yesterdayssData: index !=
-                                              (snapshot.data as List<
-                                                          CountryDayOneRoute>)
-                                                      .length -
-                                                  1
-                                          ? (snapshot.data as List<
-                                              CountryDayOneRoute>)[index + 1]
-                                          : (snapshot.data as List<
-                                              CountryDayOneRoute>)[index],
-                                    ),
-                                  ));
-                            },
-                            style: TextButton.styleFrom(
-                                primary: Colors.white,
-                                backgroundColor: Colors.black26),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(formatDate(DateTime.parse((snapshot.data
-                                        as List<CountryDayOneRoute>)[index]
-                                    .date
-                                    .toString()))),
-                                const Icon(Icons.chevron_right)
-                              ],
-                            )),
-                      );
-                    }),
+      body: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.fromLTRB(10, 15, 10, 10),
+            child: TextFormField(
+              decoration: const InputDecoration(
+                border: UnderlineInputBorder(),
+                labelText: 'Enter Country Name',
               ),
-            ],
-          );
-        },
+              onFieldSubmitted: (value) {
+                setState(() {
+                  countryName = value;
+                  getData();
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder(
+              future: getData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.none) {
+                  return const Center(
+                    child: Text('Connection failed'),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData == false) {
+                  return const Center(
+                    child: Text(
+                      'Some error occurred 🙁',
+                      style: TextStyle(color: Colors.red, fontSize: 25),
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: (snapshot.data as List<CountryDayOneRoute>)
+                              .length,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 10),
+                              child: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailsCountryDayOneRouteWidget(
+                                            todaysData: (snapshot.data as List<
+                                                CountryDayOneRoute>)[index],
+                                            yesterdayssData: index !=
+                                                    (snapshot.data as List<
+                                                                CountryDayOneRoute>)
+                                                            .length -
+                                                        1
+                                                ? (snapshot.data as List<
+                                                        CountryDayOneRoute>)[
+                                                    index + 1]
+                                                : (snapshot.data as List<
+                                                    CountryDayOneRoute>)[index],
+                                          ),
+                                        ));
+                                  },
+                                  style: TextButton.styleFrom(
+                                      primary: Colors.white,
+                                      backgroundColor: Colors.black26),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(formatDate(DateTime.parse(
+                                          (snapshot.data as List<
+                                                  CountryDayOneRoute>)[index]
+                                              .date
+                                              .toString()))),
+                                      const Icon(Icons.chevron_right)
+                                    ],
+                                  )),
+                            );
+                          }),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
