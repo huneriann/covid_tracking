@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => CountryDayOneRouteWidget(),
+        '/': (context) => const CountryDayOneRouteWidget(),
       },
     );
   }

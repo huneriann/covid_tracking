@@ -11,6 +11,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.4
   intl: ^0.17.0
+  flutter_launcher_icons: ^0.9.0
+
 
 dev_dependencies:
   flutter_test:
@@ -19,6 +21,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+flutter_icons:
+  image_path: "icon/icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
 
 
   # assets:

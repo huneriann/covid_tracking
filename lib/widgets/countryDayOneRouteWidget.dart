@@ -42,12 +42,13 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
         children: [
           Container(
             margin: const EdgeInsets.fromLTRB(10, 15, 10, 10),
-            child: TextFormField(
+            child: TextField(
               decoration: const InputDecoration(
+                suffixIcon: Icon(Icons.search),
                 border: UnderlineInputBorder(),
                 labelText: 'Enter Country Name',
               ),
-              onFieldSubmitted: (value) {
+              onSubmitted: (value) {
                 setState(() {
                   countryName = value;
                   getData();
@@ -61,7 +62,11 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.none) {
                   return const Center(
-                    child: Text('Connection failed'),
+                    child: Text(
+                      'Connection failed 🙁',
+                      style:
+                          TextStyle(color: Colors.orangeAccent, fontSize: 25),
+                    ),
                   );
                 }
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -74,7 +79,8 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
                   return const Center(
                     child: Text(
                       'Some error occurred 🙁',
-                      style: TextStyle(color: Colors.red, fontSize: 25),
+                      style:
+                          TextStyle(color: Colors.orangeAccent, fontSize: 25),
                     ),
                   );
                 }
@@ -88,43 +94,55 @@ class _CountryDayOneRouteWidgetState extends State<CountryDayOneRouteWidget> {
                             return Container(
                               margin: const EdgeInsets.symmetric(
                                   vertical: 0, horizontal: 10),
-                              child: TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              DetailsCountryDayOneRouteWidget(
-                                            todaysData: (snapshot.data as List<
-                                                CountryDayOneRoute>)[index],
-                                            yesterdayssData: index !=
-                                                    (snapshot.data as List<
-                                                                CountryDayOneRoute>)
-                                                            .length -
-                                                        1
-                                                ? (snapshot.data as List<
-                                                        CountryDayOneRoute>)[
-                                                    index + 1]
-                                                : (snapshot.data as List<
-                                                    CountryDayOneRoute>)[index],
-                                          ),
-                                        ));
-                                  },
-                                  style: TextButton.styleFrom(
-                                      primary: Colors.white,
-                                      backgroundColor: Colors.black26),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(formatDate(DateTime.parse(
-                                          (snapshot.data as List<
-                                                  CountryDayOneRoute>)[index]
-                                              .date
-                                              .toString()))),
-                                      const Icon(Icons.chevron_right)
-                                    ],
-                                  )),
+                              child: Container(
+                                height: 60,
+                                margin: const EdgeInsets.symmetric(
+                                    vertical: 3, horizontal: 0),
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DetailsCountryDayOneRouteWidget(
+                                              todaysData: (snapshot.data
+                                                      as List<
+                                                          CountryDayOneRoute>)[
+                                                  index],
+                                              yesterdayssData: index !=
+                                                      (snapshot.data as List<
+                                                                  CountryDayOneRoute>)
+                                                              .length -
+                                                          1
+                                                  ? (snapshot.data as List<
+                                                          CountryDayOneRoute>)[
+                                                      index + 1]
+                                                  : (snapshot.data as List<
+                                                          CountryDayOneRoute>)[
+                                                      index],
+                                            ),
+                                          ));
+                                    },
+                                    style: TextButton.styleFrom(
+                                        primary: Colors.white,
+                                        backgroundColor: Colors.black26),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          formatDate(DateTime.parse(
+                                              (snapshot.data as List<
+                                                          CountryDayOneRoute>)[
+                                                      index]
+                                                  .date
+                                                  .toString())),
+                                          style: const TextStyle(fontSize: 17),
+                                        ),
+                                        const Icon(Icons.chevron_right)
+                                      ],
+                                    )),
+                              ),
                             );
                           }),
                     ),
